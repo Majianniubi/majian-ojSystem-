@@ -1,0 +1,45 @@
+server:
+  port: 8121
+spring:
+  application:
+    name: majian-oj-gateway-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.242.136:8848
+    gateway:
+      routes: # 网关路由配置
+        - id: majian-ojSystem-user-service      # 路由id，自定义，只要唯一即可
+          # uri: http://127.0.0.1:8081   # 路由的目标地址 (直接写死地址的方式，不推荐)
+          uri: lb://majian-ojSystem-user-service     # 路由的目标地址 lb是负载均衡，后面跟服务名称(推荐)
+          predicates: # 路由断言，判断请求是否符合路由规则的条件
+            - Path=/api/user/**
+        - id: majian-ojSystem-question-service
+          uri: lb://majian-ojSystem-question-service
+          predicates:
+            - Path=/api/question/**
+        - id: majian-ojSystem-judge-service
+          uri: lb://majian-ojSystem-judge-service
+          predicates:
+            - Path=/api/judge/**
+        - id: majian-ojSystem-comment-service
+          uri: lb://majian-ojSystem-comment-service
+          predicates:
+            - Path=/api/comment/**
+        - id: majian-ojSystem-comment-service
+          uri: lb:ws://majian-ojSystem-comment-service
+          predicates:
+            - Path=/api/comment/ws/**
+  main:
+    web-application-type: reactive
+knife4j:
+  gateway:
+    # ① 第一个配置，开启gateway聚合组件
+    enabled: true
+    # ② 第二行配置，设置聚合模式采用discover服务发现的模式
+    strategy: discover
+    discover:
+      # ③ 第三行配置，开启discover模式
+      enabled: true
+      # ④ 第四行配置，聚合子服务全部为Swagger2规范的文档
+      version: swagger2

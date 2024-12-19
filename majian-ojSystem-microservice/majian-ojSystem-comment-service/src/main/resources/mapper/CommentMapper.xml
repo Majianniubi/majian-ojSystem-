@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @author ""程序员马建</a> -->
+<!-- @from <a href="">自我开发项目</a> -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.majian.springbootinit.mapper.CommentMapper">
+    <select id="getCommentsByQuestionId" resultType="com.majian.springbootinit.model.entity.Comment">
+        select * from comment where questionId = #{questionId}
+    </select>
+</mapper>
